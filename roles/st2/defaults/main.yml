@@ -1,8 +1,8 @@
 ---
 # 'latest' to get latest version or numeric like '2.1.1'
-st2_version: latest
+st2_version: present
 # used only if 'st2_version' is numeric
-st2_revision: 1
+st2_revision: Null
 
 # Hash with StackStorm configuration settings to set in 'st2.conf' ini file
 # See https://github.com/StackStorm/st2/blob/master/conf/st2.conf.sample for a full list

@@ -7,40 +7,15 @@
   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "6"
   tags: st2
 
-- name: Install latest st2 package
+- name: Install st2 package
   become: yes
   package:
-    name: st2
-    state: latest
-  when: st2_version == "latest"
+    name: "st2{% if st2_version != 'latest' and st2_version != 'present' %}={{st2_version}}-{% if st2_revision %}{{st2_revision}}{% else %}*{% endif %}{% endif %}"
+    state: "{% if st2_version == 'latest' %}latest{% else %}present{% endif %}"
   notify:
     - restart st2
     - reload st2
   tags: st2, skip_ansible_lint
-
-- name: Install present st2 package
-  become: yes
-  package:
-    name: st2
-    state: present
-  when: st2_version == "present"
-  notify:
-    - restart st2
-    - reload st2
-  tags: st2, skip_ansible_lint
-
-- name: Install pinned st2 package
-  become: yes
-  package:
-    name: st2={{ st2_version }}-{{ st2_revision }}
-    state: present
-  when:
-    - st2_version != "latest"
-    - st2_version != "present"
-  notify:
-    - restart st2
-    - reload st2
-  tags: st2
 
 - name: Create and configure StackStorm system user
   include: user.yml
